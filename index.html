@@ -1,49 +1,31 @@
 <!doctype html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8">
+<html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Formatura do ABC - Isac Gomes</title>
 <style>
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%;background:#071b48;font-family:Arial,sans-serif}
-body{display:flex;justify-content:center}
-#app{position:relative;width:min(100vw,56.28vh);aspect-ratio:941/1672;overflow:hidden;background:#071b48}
-#screen{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.key{position:absolute;border:0;background:transparent;cursor:pointer;border-radius:18%;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
-.key:active{background:rgba(255,255,255,.18);transform:scale(.94)}
-#dots{position:absolute;left:50%;top:35.6%;transform:translateX(-50%);z-index:5;
-color:#fff;background:rgba(5,30,92,.72);border:2px solid #f7b51b;border-radius:999px;
-min-width:145px;height:36px;padding:4px 14px;text-align:center;font-size:20px;letter-spacing:5px;
-box-shadow:0 3px 12px rgba(0,0,0,.25);opacity:0;transition:.2s}
-#dots.show{opacity:1}
-#msg{position:absolute;left:50%;top:38.3%;transform:translateX(-50%);z-index:6;color:#fff;
-font-weight:700;font-size:12px;text-shadow:0 2px 5px #000;white-space:nowrap}
-#success{position:absolute;inset:0;display:none;align-items:center;justify-content:center;z-index:20;
-background:linear-gradient(rgba(4,30,95,.94),rgba(4,30,95,.98));color:white;text-align:center;padding:30px}
-#success.show{display:flex;animation:fade .5s ease}
-#success h1{color:#ffc21c;font-size:30px;margin:0 0 10px}
-#success p{font-size:17px;line-height:1.45;margin:0}
-@keyframes fade{from{opacity:0}to{opacity:1}}
-</style>
-</head>
-<body>
-<main id="app">
-<img id="screen" src="senha.png" alt="Tela de senha do convite">
-<div id="dots" aria-live="polite"></div>
-<div id="msg" aria-live="polite"></div>
-<div id="keys"></div>
-<section id="success">
-  <div><h1>Senha correta! ✨</h1><p>O convite foi aberto.<br>Esta é a tela de teste.</p></div>
-</section>
-</main>
-<script>
-const PASSWORD="abc2026";
-let typed="";
-const keys=document.getElementById("keys"), dots=document.getElementById("dots"), msg=document.getElementById("msg");
-
-// Coordenadas em porcentagem, alinhadas à imagem 941 x 1672.
-// Livro esquerdo: A–Y em 5x5 + Z. Livro direito: números + apagar.
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#071b48;font-family:Arial,sans-serif}
+body{display:flex;justify-content:center}#app{position:relative;width:min(100vw,56.28vh);aspect-ratio:941/1672;overflow:hidden;background:#071b48}
+.page{position:absolute;inset:0;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .55s ease}
+.page.active{opacity:1;visibility:visible;pointer-events:auto}.media{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.key,.hotspot{position:absolute;border:0;background:transparent;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;z-index:5}
+.key{border-radius:18%}.key:active{background:rgba(255,255,255,.18);transform:scale(.94)}
+#dots{position:absolute;left:50%;top:35.6%;transform:translateX(-50%);z-index:8;color:#fff;background:rgba(5,30,92,.72);border:2px solid #f7b51b;border-radius:999px;min-width:145px;height:36px;padding:4px 14px;text-align:center;font-size:20px;letter-spacing:5px;box-shadow:0 3px 12px rgba(0,0,0,.25);opacity:0;transition:.2s}
+#dots.show{opacity:1}#msg{position:absolute;left:50%;top:38.3%;transform:translateX(-50%);z-index:9;color:#fff;font-weight:700;font-size:12px;text-shadow:0 2px 5px #000;white-space:nowrap}
+#bookHotspot{left:34%;top:37%;width:64%;height:48%;border-radius:8%}
+#locationHotspot{left:30%;top:70.5%;width:42%;height:6.5%;border-radius:999px}
+#confirmHotspot{left:30%;top:78.5%;width:42%;height:6.5%;border-radius:999px}
+#video{background:#000}
+</style></head><body><main id="app">
+<section id="passwordPage" class="page active"><img class="media" src="senha.png"><div id="dots"></div><div id="msg"></div><div id="keys"></div></section>
+<section id="coverPage" class="page"><img class="media" src="capa.png"><button id="bookHotspot" class="hotspot" aria-label="Abrir convite"></button></section>
+<section id="videoPage" class="page"><video id="video" class="media" playsinline preload="auto"><source src="video.mp4" type="video/mp4"></video></section>
+<section id="invitePage" class="page"><img class="media" src="convite.png">
+<a id="locationHotspot" class="hotspot" href="https://maps.app.goo.gl/oCMadSF9pv5w91hJ6" target="_blank" rel="noopener" aria-label="Localização"></a>
+<a id="confirmHotspot" class="hotspot" href="https://wa.link/2hsexj" target="_blank" rel="noopener" aria-label="Confirmar presença"></a></section>
+</main><script>
+const PASSWORD="abc2026";let typed="";
+const keys=document.getElementById("keys"),dots=document.getElementById("dots"),msg=document.getElementById("msg"),video=document.getElementById("video");
+function showPage(id){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById(id).classList.add("active");}
 const letters=[
  ['a',18.7,47.5],['b',26.0,47.5],['c',33.5,47.5],['d',41.0,47.5],['e',48.3,47.5],
  ['f',18.0,52.5],['g',25.7,52.5],['h',33.1,52.5],['i',40.5,52.5],['j',48.0,52.5],
@@ -71,25 +53,9 @@ letters.forEach(k=>addKey(...k));
 nums.forEach(k=>addKey(...k));
 addKey("apagar",84.2,71.6,8.2,4.6);
 
-function press(c){
- msg.textContent="";
- if(c==="apagar"){ typed=typed.slice(0,-1); update(); return; }
- if(typed.length>=PASSWORD.length) typed="";
- typed+=c.toLowerCase(); update();
- if(typed.length===PASSWORD.length){
-   if(typed===PASSWORD){
-     setTimeout(()=>document.getElementById("success").classList.add("show"),220);
-   }else{
-     msg.textContent="Senha incorreta. Tente novamente.";
-     if(navigator.vibrate) navigator.vibrate(120);
-     setTimeout(()=>{typed=""; update();},700);
-   }
- }
-}
-function update(){
- dots.textContent="•".repeat(typed.length);
- dots.classList.toggle("show",typed.length>0);
-}
-</script>
-</body>
-</html>
+
+function press(c){msg.textContent="";if(c==="apagar"){typed=typed.slice(0,-1);update();return}if(typed.length>=PASSWORD.length)typed="";typed+=c.toLowerCase();update();if(typed.length===PASSWORD.length){if(typed===PASSWORD){setTimeout(()=>showPage("coverPage"),220)}else{msg.textContent="Senha incorreta. Tente novamente.";if(navigator.vibrate)navigator.vibrate(120);setTimeout(()=>{typed="";update()},700)}}}
+function update(){dots.textContent="•".repeat(typed.length);dots.classList.toggle("show",typed.length>0)}
+document.getElementById("bookHotspot").onclick=async()=>{showPage("videoPage");video.currentTime=0;try{await video.play()}catch(e){video.controls=true}};
+video.onended=()=>showPage("invitePage");
+</script></body></html>
