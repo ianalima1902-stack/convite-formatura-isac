@@ -15,10 +15,31 @@ body{display:flex;justify-content:center}#app{position:relative;width:min(100vw,
 #locationHotspot{left:30%;top:70.5%;width:42%;height:6.5%;border-radius:999px}
 #confirmHotspot{left:30%;top:78.5%;width:42%;height:6.5%;border-radius:999px}
 #video{background:#000}
+#skipIntro{
+ position:absolute;
+ left:50%;
+ bottom:max(3.2%, env(safe-area-inset-bottom));
+ transform:translateX(-50%);
+ z-index:12;
+ border:1px solid rgba(255,255,255,.55);
+ background:rgba(5,24,65,.62);
+ color:#fff;
+ padding:8px 16px;
+ border-radius:999px;
+ font-size:12px;
+ font-weight:600;
+ letter-spacing:.2px;
+ cursor:pointer;
+ backdrop-filter:blur(4px);
+ -webkit-backdrop-filter:blur(4px);
+ box-shadow:0 2px 8px rgba(0,0,0,.18);
+ -webkit-tap-highlight-color:transparent;
+}
+#skipIntro:active{transform:translateX(-50%) scale(.96);background:rgba(5,24,65,.78)}
 </style></head><body><main id="app">
 <section id="passwordPage" class="page active"><img class="media" src="senha.png"><div id="dots"></div><div id="msg"></div><div id="keys"></div></section>
 <section id="coverPage" class="page"><img class="media" src="capa.png"><button id="bookHotspot" class="hotspot" aria-label="Abrir convite"></button></section>
-<section id="videoPage" class="page"><video id="video" class="media" playsinline preload="auto"><source src="video.mp4" type="video/mp4"></video></section>
+<section id="videoPage" class="page"><video id="video" class="media" playsinline preload="auto"><source src="video.mp4" type="video/mp4"></video><button id="skipIntro" type="button" aria-label="Pular abertura">Pular abertura ›</button></section>
 <section id="invitePage" class="page"><img class="media" src="convite.png">
 <a id="locationHotspot" class="hotspot" href="https://maps.app.goo.gl/oCMadSF9pv5w91hJ6" target="_blank" rel="noopener" aria-label="Localização"></a>
 <a id="confirmHotspot" class="hotspot" href="https://wa.link/2hsexj" target="_blank" rel="noopener" aria-label="Confirmar presença"></a></section>
@@ -57,5 +78,9 @@ addKey("apagar",84.2,71.6,8.2,4.6);
 function press(c){msg.textContent="";if(c==="apagar"){typed=typed.slice(0,-1);update();return}if(typed.length>=PASSWORD.length)typed="";typed+=c.toLowerCase();update();if(typed.length===PASSWORD.length){if(typed===PASSWORD){setTimeout(()=>showPage("coverPage"),220)}else{msg.textContent="Senha incorreta. Tente novamente.";if(navigator.vibrate)navigator.vibrate(120);setTimeout(()=>{typed="";update()},700)}}}
 function update(){dots.textContent="•".repeat(typed.length);dots.classList.toggle("show",typed.length>0)}
 document.getElementById("bookHotspot").onclick=async()=>{showPage("videoPage");video.currentTime=0;try{await video.play()}catch(e){video.controls=true}};
+document.getElementById("skipIntro").onclick=()=>{
+ video.pause();
+ showPage("invitePage");
+};
 video.onended=()=>showPage("invitePage");
 </script></body></html>
